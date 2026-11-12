@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convierte datos aburridos en decisiones organizacionales que destaquen: Introducción al análisis de datos con R</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23006bff'/%3E%3Cpath d='M38 28V72M38 28H56a13 13 0 0 1 0 27H38M55 55L70 72' fill='none' stroke='%23fff' stroke-width='9' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0b3558;--blue:#006bff;--slate:#476788;--mist:#a6bbd1;--cloud:#f8f9fb;--pebble:#f0f3f8;--line:#d4e0ed;--mag:#e55cff;--cy:#0099ff;--cob:#004eba;
+--sh:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 8px 15px,rgba(71,103,136,.08) 0 30px 50px;--sh3:rgba(71,103,136,.04) 0 4px 5px,rgba(71,103,136,.03) 0 8px 15px,rgba(71,103,136,.06) 0 15px 30px;
+--f:'Manrope','Gilroy',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:#fff;color:var(--ink);font:400 17px/1.6 var(--f);overflow-x:hidden}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px;position:relative;z-index:2}
+nav{position:sticky;top:0;z-index:50;height:64px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+nav img{height:38px;margin-right:16px}#pg{position:absolute;left:0;bottom:-1px;height:3px;width:0;background:var(--blue)}
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#bg i{position:absolute;display:block;will-change:transform}
+.ring{border:6px solid var(--blue);border-radius:50%;opacity:.16}.dot{border-radius:50%;filter:blur(30px);opacity:.28}
+.tri{clip-path:polygon(50% 0,100% 100%,0 100%);opacity:.14}.sq{border:5px solid var(--ink);opacity:.1}
+.fl{animation:fl 9s ease-in-out infinite alternate}.sp{animation:sp 40s linear infinite}
+@keyframes fl{to{margin-top:-36px}}@keyframes sp{to{rotate:360deg}}
+section{padding:72px 0;position:relative}
+h1,h2{font-weight:700;color:var(--ink);margin:0}
+h1{font-size:clamp(36px,5.2vw,68px);line-height:1.15}
+h2{font-size:clamp(34px,4.6vw,50px);line-height:1.2;transform-origin:left top;margin-bottom:32px;max-width:900px;will-change:transform;position:relative;z-index:3}
+h3{font-size:24px;font-weight:600;margin:32px 0 12px}
+p{margin:0 0 16px;max-width:760px}.mut{color:var(--slate)}
+.hero{padding:56px 0 40px}.hero .g{display:grid;grid-template-columns:1.2fr .8fr;gap:48px;align-items:center}
+.logos{display:flex;gap:24px;align-items:center;margin-bottom:32px}.logos img{height:64px}
+.badge{display:inline-block;background:#e6f0ff;color:var(--cob);font-size:13px;font-weight:600;border-radius:50px;padding:4px 12px;margin:0 8px 12px 0}
+.card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:var(--sh);transition:transform .25s}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:24px}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card h4{margin:0 0 8px;font-size:20px;font-weight:600}.card p{margin:0}
+ul,ol{padding-left:22px;max-width:860px}li{margin-bottom:10px}b,strong{font-weight:700}
+.b{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font:600 18px/1.6 var(--f);border-radius:8px;padding:10px 18px;margin:6px 10px 6px 0;box-shadow:var(--sh3);transition:transform .2s}
+.b:hover{transform:translateY(-3px)}.b:focus-visible,a:focus-visible{outline:3px solid var(--cy);outline-offset:3px}
+.qr{width:170px;height:170px;border-radius:16px;border:1px solid var(--line);padding:8px;background:#fff;box-shadow:var(--sh3)}
+.row{display:flex;gap:32px;align-items:center;flex-wrap:wrap}
+.tw{overflow-x:auto;border-radius:16px;border:1px solid var(--line);box-shadow:var(--sh3);background:#fff}
+table{border-collapse:collapse;width:100%;font-size:16px}th{background:var(--pebble);text-align:left;font-size:14px;color:var(--slate)}
+th,td{padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}tr:last-child td{border:0}
+code{background:var(--pebble);color:var(--cob);padding:1px 7px;border-radius:6px;font-size:.92em}
+.fn{font-size:14px;color:var(--slate);margin-top:8px}
+.vid{aspect-ratio:16/9;width:100%;border:0;border-radius:16px;box-shadow:var(--sh3);background:var(--pebble)}
+.big{font-size:clamp(28px,3.6vw,44px);font-weight:700;line-height:1.25;max-width:900px}
+.vis{position:relative}.vis .dot{position:absolute;width:260px;height:260px}.vis>.card,.vis>svg{position:relative}
+svg.ch{width:100%;height:auto;background:#fff;border-radius:16px;border:1px solid var(--line);box-shadow:var(--sh3)}
+.layers div{margin:0 0 10px;padding:14px 18px;border-radius:12px;font-weight:600;border:1px solid var(--line);background:#fff}
+.scene{perspective:1000px;width:240px;height:240px;margin:0 auto}.tilt{width:100%;height:100%;transform-style:preserve-3d;transition:transform .15s}
+.cube{position:relative;width:170px;height:170px;margin:35px auto;transform-style:preserve-3d;animation:rot 16s linear infinite}
+.cube div{position:absolute;inset:0;background:#fff;border:2px solid var(--line);border-radius:18px;box-shadow:inset 0 0 40px rgba(0,107,255,.08);padding:14px}
+.cube svg,.coin svg{width:100%;height:100%}
+.cube div:nth-child(1){transform:translateZ(85px)}.cube div:nth-child(2){transform:rotateY(180deg) translateZ(85px)}
+.cube div:nth-child(3){transform:rotateY(90deg) translateZ(85px)}.cube div:nth-child(4){transform:rotateY(-90deg) translateZ(85px)}
+.cube div:nth-child(5){transform:rotateX(90deg) translateZ(85px)}.cube div:nth-child(6){transform:rotateX(-90deg) translateZ(85px)}
+@keyframes rot{from{transform:rotateX(-20deg) rotateY(0)}to{transform:rotateX(340deg) rotateY(360deg)}}
+.coin{width:120px;height:120px;position:relative;transform-style:preserve-3d;animation:flip 6s linear infinite;margin:20px}
+.coin div{position:absolute;inset:0;border-radius:50%;background:#fff;border:3px solid var(--line);padding:16px;backface-visibility:hidden;box-shadow:var(--sh3)}
+.coin div+div{transform:rotateY(180deg)}@keyframes flip{to{transform:rotateY(360deg)}}
+.cs{perspective:700px;display:inline-block}
+.rv{opacity:0;transform:translateY(40px) scale(.97);transition:opacity .8s,transform .8s}.rv.on{opacity:1;transform:none}
+footer{background:var(--cloud);padding:40px 0;margin-top:40px;position:relative;z-index:2}
+@media(max-width:860px){.hero .g,.g2,.g3{grid-template-columns:1fr}section{padding:48px 0}nav img{height:30px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="R" viewBox="0 0 100 100"><ellipse cx="50" cy="50" rx="46" ry="38" fill="#c4c8cf"/><ellipse cx="52" cy="50" rx="36" ry="28" fill="#fff"/><path d="M38 30V72M38 30H56a13 13 0 0 1 0 27H38M55 57L70 72" fill="none" stroke="#276dc3" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></symbol></svg>
+<div id="bg" aria-hidden="true">
+<i class="dot" data-s=".05" style="width:380px;height:380px;background:var(--mag);left:-6%;top:8%"></i>
+<i class="dot" data-s=".09" style="width:420px;height:420px;background:var(--cy);right:-8%;top:40%"></i>
+<i class="ring fl" data-s=".12" style="width:220px;height:220px;right:8%;top:10%"></i>
+<i class="tri sp" data-s=".2" style="width:120px;height:110px;background:var(--cy);left:6%;top:55%"></i>
+<i class="sq sp" data-s=".15" style="width:90px;height:90px;left:44%;top:78%"></i>
+<i class="ring fl" data-s=".18" style="width:90px;height:90px;left:30%;top:20%;border-color:var(--mag)"></i>
+<i class="tri fl" data-s=".1" style="width:80px;height:70px;background:var(--mag);right:22%;top:70%"></i>
+<i class="sq fl" data-s=".22" style="width:60px;height:60px;right:5%;top:88%;border-color:var(--blue)"></i>
+</div>
+<nav><div class="wrap"><div><img src="https://cdn.jsdelivr.net/gh/TheGuppy-blip/Distribucion@a068a4c803d46ebfdf456ad4e9de9e3b1bd9297c/imagenes/logo_unam_negro.png" alt="UNAM"><img src="https://cdn.jsdelivr.net/gh/TheGuppy-blip/Distribucion@a068a4c803d46ebfdf456ad4e9de9e3b1bd9297c/imagenes/logo_fesz_byn.png" alt="FES Zaragoza"></div><a class="b" href="#s9" style="margin:0;padding:6px 16px">Materiales</a></div><div id="pg"></div></nav>
+
+<header class="hero"><div class="wrap g">
+<div>
+<div class="logos"><img src="https://cdn.jsdelivr.net/gh/TheGuppy-blip/Distribucion@a068a4c803d46ebfdf456ad4e9de9e3b1bd9297c/imagenes/logo_unam_negro.png" alt="UNAM"><img src="https://cdn.jsdelivr.net/gh/TheGuppy-blip/Distribucion@a068a4c803d46ebfdf456ad4e9de9e3b1bd9297c/imagenes/logo_fesz_byn.png" alt="FES Zaragoza"></div>
+<span class="badge">Universidad Nacional Autónoma de México</span><span class="badge">Facultad de Estudios Superiores Zaragoza</span>
+<p class="mut" style="font-weight:600">Congreso Internacional de Psicología del Trabajo y las Organizaciones</p>
+<h1>Convierte datos aburridos en decisiones organizacionales que destaquen: Introducción al análisis de datos con R</h1>
+<p style="margin-top:24px;font-size:20px"><b>Alan Giovanni Ramírez Cortés</b><br><span class="mut">19 de noviembre de 2026</span></p>
+</div>
+<div class="vis"><i class="dot" style="left:10%;top:0;background:var(--mag)"></i><i class="dot" style="right:0;bottom:0;background:var(--cy)"></i>
+<div class="scene" id="sc"><div class="tilt" id="tl"><div class="cube"><div><svg><use href="#R"/></svg></div><div><svg><use href="#R"/></svg></div><div><svg><use href="#R"/></svg></div><div><svg><use href="#R"/></svg></div><div><svg><use href="#R"/></svg></div><div><svg><use href="#R"/></svg></div></div></div></div></div>
+</div>
+<div class="wrap g2" style="margin-top:48px;align-items:stretch">
+<div class="card rv"><h3 style="margin-top:0">Objetivo del taller</h3><p>Al finalizar, las personas participantes podrán analizar datos con R mediante técnicas estadísticas descriptivas e inferenciales, así como elaborar visualizaciones para comunicar hallazgos y fundamentar la toma de decisiones en contextos organizacionales.</p></div>
+<div class="card rv"><h3 style="margin-top:0">Temario general</h3><ul style="margin:0"><li>Introducción a R: ¿por qué usar R?</li><li>Entorno de R y Google Colab</li><li>Manipulación de datos</li><li>Estadística descriptiva y análisis exploratorio de datos</li><li>Vista a la estadística inferencial: diferencia de grupos y correlación de Pearson</li><li>Creación de gráficas y presentación de datos</li></ul></div>
+</div></header>
+
+<section id="s2"><div class="wrap"><h2>2. Acceso a internet</h2>
+<div class="g2"><div class="card rv"><h4>Nombre de la red</h4><p style="font-size:28px;font-weight:600">------</p></div><div class="card rv"><h4>Contraseña</h4><p style="font-size:28px;font-weight:600">------</p></div></div></div></section>
+
+<section id="s3"><div class="wrap"><h2>3. Dinámica: "El Programador ciego"</h2>
+<p class="big rv">Una computadora hace exactamente lo que le dices, no lo que quisiste decir.</p>
+<h3>Indicaciones:</h3>
+<ol class="card rv" style="padding:24px 24px 14px 48px"><li>Formen parejas y siéntense espalda con espalda, sin ver el dibujo de la otra persona.</li><li>Una persona recibe una imagen.</li><li>Debe describirla con figuras geométricas o formas simples, paso a paso, para que su pareja la dibuje, sin mostrarla y sin permitir preguntas.</li><li>Tienen 60 segundos. Al terminar, muestran el dibujo hecho junto al dibujo guía.</li><li>Cambian de turno.</li></ol></div></section>
+
+<section id="s4"><div class="wrap"><h2>4. Introducción: ¿por qué importa?</h2>
+<div class="g2"><div class="card rv"><p>Un factor psicosocial es una condición relacionada con la organización, el contenido y las relaciones del trabajo que puede influir en la salud, el bienestar y el desempeño de las personas trabajadoras. Algunos ejemplos son la carga excesiva de trabajo, las jornadas prolongadas y los conflictos interpersonales. Cuando estas condiciones son desfavorables, pueden generar problemas de salud y problemas de desempeño.</p><p>En México, la NOM-035-STPS-2018 obliga a los centros de trabajo a identificar, analizar y prevenir estos factores.</p></div>
+<div class="card rv"><p><b>¿Por qué analizar datos?</b> Porque cada cuestionario aplicado son decenas de respuestas por persona, y cada decisión (cambiar turnos, capacitar jefaturas, redistribuir carga) afecta a personas e implica mover recursos. Sin análisis, decides con la opinión; con análisis, decides con evidencia que otros pueden revisar.</p></div></div></div></section>
+
+<section id="s5"><div class="wrap"><h2>5. ¿Quién es R?</h2>
+<div class="row"><div class="cs"><div class="coin"><div><svg><use href="#R"/></svg></div><div><svg><use href="#R"/></svg></div></div></div>
+<div style="flex:1;min-width:280px"><p>R es un lenguaje de programación de código abierto para programar, analizar y visualizar datos, y se usa ampliamente en el análisis estadístico.</p>
+<ul><li>Su desarrollo comenzó en 1992 con los estadísticos Ross Ihaka y Robert Gentleman, de la Universidad de Auckland, Nueva Zelanda.</li><li>Hoy su desarrollo y mantenimiento los realiza el R Core Team, con el respaldo de la R Foundation.</li></ul></div></div></div></section>
+
+<section id="s6"><div class="wrap"><h2>6. ¿Por qué usar R y no otro?</h2>
+<h3 style="margin-top:0">Seis razones</h3>
+<div class="g3">
+<div class="card rv"><h4>1. Es gratis y es tuyo.</h4><p>R es software libre: no hay licencia que renovar, ni cuota por usuario, ni departamento de compras de por medio. Para una organización pequeña o un proyecto universitario, cambia las reglas del juego.</p></div>
+<div class="card rv"><h4>2. Tiene un ecosistema enorme.</h4><p>Miles de paquetes creados por la comunidad cubren desde estadística básica hasta psicometría, tablas listas para publicar y visualizaciones de alto nivel.</p></div>
+<div class="card rv"><h4>3. Es el idioma de muchas ciencias.</h4><p>Muchos métodos estadísticos nuevos, incluidos los usados en investigación psicológica, aparecen primero como paquetes de R.</p></div>
+<div class="card rv"><h4>4. Flexibilidad.</h4><p>Los programas con interfaz gráfica ofrecen procedimientos predeterminados. En R puedes combinar funciones, modificar procedimientos existentes y construir análisis que se ajusten a tus preguntas de investigación.</p></div>
+<div class="card rv"><h4>5. Reproducibilidad.</h4><p>En lugar de depender de recordar qué opciones elegiste en una interfaz, conservas un script con cada paso del análisis. Otra persona puede ejecutarlo, revisarlo y verificarlo.</p></div>
+<div class="card rv"><h4>6. Integración tecnológica.</h4><p>R puede conectarse con bases de datos, archivos de Excel, servicios web, herramientas de inteligencia artificial y otros lenguajes de programación.</p></div></div>
+<p style="margin-top:32px">Pero también hablamos de las desventajas. La curva de aprendizaje al inicio puede ser pronunciada, los mensajes de error pueden parecer interminables y escribir instrucciones exige precisión.</p>
+<p class="big rv"><b>¿Y por qué programar?</b> No aprendemos R porque otros programas no puedan hacer estadística. Aprendemos R porque queremos comprender, controlar y construir los procedimientos con los que analizamos nuestros datos.</p></div></section>
+
+<section id="s7"><div class="wrap"><h2>7. Metodología CRISP-DM y metodología científica</h2>
+<p>Ambas son rutas ordenadas para pasar de una pregunta a una conclusión. La metodología científica es la ruta de la investigación; CRISP-DM (Cross-Industry Standard Process for Data Mining) es la ruta de los equipos que analizan datos en organizaciones. Se parecen mucho, y verlas juntas ayuda a notar que el análisis no empieza en el programa, sino en la pregunta.</p>
+<div class="tw rv"><table><tr><th>Fase CRISP-DM</th><th>Pregunta que responde</th><th>Equivalente en la metodología científica</th></tr>
+<tr><td><b>1. Comprensión del problema</b></td><td>¿Qué decisión hay que tomar y para quién?</td><td>Planteamiento del problema, pregunta e hipótesis</td></tr>
+<tr><td><b>2. Comprensión de los datos</b></td><td>¿Qué tenemos y qué tan confiable es?</td><td>Revisión de la medición y exploración de la información recolectada</td></tr>
+<tr><td><b>3. Preparación de los datos</b></td><td>¿Cómo los dejamos listos para analizar?</td><td>Organización y depuración de la base</td></tr>
+<tr><td><b>4. Modelado</b></td><td>¿Qué técnica responde la pregunta?</td><td>Análisis estadístico</td></tr>
+<tr><td><b>5. Evaluación</b></td><td>¿El resultado es confiable y sirve para decidir?</td><td>Interpretación y discusión</td></tr>
+<tr><td><b>6. Despliegue</b></td><td>¿Cómo lo comunicamos para que alguien actúe?</td><td>Conclusiones y difusión de resultados</td></tr></table></div>
+<p style="margin-top:20px">Es una espiral, no una línea recta: al preparar los datos puede que debas volver a replantear la pregunta.</p></div></section>
+
+<section id="s8"><div class="wrap"><h2>8. Características de R: del bit al usuario</h2>
+<div class="g2" style="align-items:start"><div>
+<ul><li><b>Lenguaje:</b> el idioma en que escribes las instrucciones. R es el lenguaje.</li>
+<li><b>IDE (entorno de desarrollo integrado):</b> el escritorio de trabajo donde escribes, ejecutas y ves resultados. Piénsalo así: el lenguaje es el español; el IDE es Word. RStudio y Positron son ejemplos conocidos.</li>
+<li><b>IDE potenciado con IA:</b> un entorno que sugiere código, explica errores y propone correcciones, como alguien que revisa tu escritura en tiempo real. Google Colab es el ejemplo que usaremos. Una regla: la IA sugiere, tú verificas. Un análisis que no entiendes no es tuyo.</li>
+<li><b>ADE (Codex, Claude Code):</b> herramientas donde un agente de IA ejecuta tareas más completas (escribe, corre y corrige código) bajo tu supervisión.</li>
+<li><b>Google Colab:</b> un cuaderno en la nube que corre en tu navegador. Se organiza en celdas: unas con texto y otras con instrucciones ejecutables. No instalas nada, no gastas la memoria de tu computadora y puedes compartir el cuaderno con un enlace.</li></ul></div>
+<div class="layers rv" style="margin-top:12px"><div style="margin-left:0;background:#e6f0ff;color:var(--cob)">Usuario</div><div style="margin-left:24px">Interfaz</div><div style="margin-left:48px">Consola</div><div style="margin-left:72px;background:var(--ink);color:#fff">Bits (ceros y unos)</div></div></div>
+<h3>Cómo descargar RStudio y Positron:</h3>
+<div class="g2"><div><h4 style="margin:0 0 8px">RStudio</h4><iframe class="vid" src="https://www.youtube.com/embed/hbgzW3Cvda4" title="Cómo descargar RStudio" loading="lazy" allowfullscreen></iframe></div>
+<div><h4 style="margin:0 0 8px">Positron</h4><iframe class="vid" src="https://www.youtube.com/embed/CCA4DGr5iU8" title="Cómo descargar Positron" loading="lazy" allowfullscreen></iframe></div></div></div></section>
+
+<section id="s9"><div class="wrap"><h2>9. A trabajar con Google Colab</h2>
+<div class="g2"><div class="card rv"><h4>Carpeta de Drive con los materiales</h4><div class="row"><img class="qr" src="https://cdn.jsdelivr.net/gh/TheGuppy-blip/Distribucion@e5011027a8fc5b43f289404cc21407ba3e2b92c2/imagenes/Drive.png" alt="QR de la carpeta de Drive"><a class="b" href="https://drive.google.com/drive/folders/1kpTwlJdI0jmYKhbeVckLVvMKIxNUKZdW?usp=sharing" target="_blank" rel="noopener">Abrir carpeta de Drive</a></div></div>
+<div class="card rv"><h4>Página web del taller</h4><div class="row"><img class="qr" src="https://cdn.jsdelivr.net/gh/TheGuppy-blip/Distribucion@e5011027a8fc5b43f289404cc21407ba3e2b92c2/imagenes/taller.png" alt="QR de la página web del taller"><a class="b" href="https://theguppy-blip.github.io/R/taller" target="_blank" rel="noopener">Abrir página del taller</a></div></div></div></div></section>
+
+<section id="s10"><div class="wrap"><h2>10. Fundamentos de R: comandos y operadores básicos</h2>
+<h3 style="margin-top:0">Descripción breve de cada concepto:</h3>
+<ul><li><b>Tipos de operadores:</b> símbolos para hacer cosas. Hay aritméticos (sumar, multiplicar), de comparación (mayor que, igual a), lógicos ("y", "o", "no") y de asignación (guardar un resultado con un nombre).</li></ul>
+<div class="tw rv"><table><tr><th>Operación</th><th>Operador</th><th>Aridad<sup>1</sup></th><th>Asociatividad</th><th>Precedencia</th></tr>
+<tr><td>Exponenciación</td><td><code>**</code></td><td>Binario</td><td>Por la derecha</td><td>1</td></tr>
+<tr><td>Identidad</td><td><code>+</code></td><td>Unario</td><td></td><td>2</td></tr>
+<tr><td>Cambio de signo</td><td><code>-</code></td><td>Unario</td><td></td><td>2</td></tr>
+<tr><td>Multiplicación</td><td><code>*</code></td><td>Binario</td><td>Por la izquierda</td><td>3</td></tr>
+<tr><td>División</td><td><code>/</code></td><td>Binario</td><td>Por la izquierda</td><td>3</td></tr>
+<tr><td>Módulo (remanente)</td><td><code>%%</code></td><td>Binario</td><td>Por la izquierda</td><td>3</td></tr>
+<tr><td>Suma</td><td><code>+</code></td><td>Binario</td><td>Por la izquierda</td><td>4</td></tr>
+<tr><td>Resta</td><td><code>-</code></td><td>Binario</td><td>Por la izquierda</td><td>4</td></tr></table></div>
+<p class="fn"><sup>1</sup>Aridad: número de operandos</p>
+<ul style="margin-top:20px"><li><b>Asignación:</b> <code>&lt;-</code> o <code>=</code> se usan para asignar valores a variables.</li><li><b>Relacionales:</b> <code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> para comparar valores.</li><li><b>Lógicos:</b> <code>&amp;</code>, <code>|</code>, <code>!</code> para operaciones lógicas (AND, OR, NOT).</li><li><b>De secuencia:</b> <code>:</code> genera secuencias de números (e.g. <code>1:10</code>).</li></ul>
+<ul><li><b>Tipos de datos:</b> la naturaleza de cada valor: numéricos, de texto, lógicos (verdadero o falso), fechas y factores (categorías). También existe el valor faltante, que R marca con <code>NA</code>.
+<ul style="margin-top:10px"><li><b>Numéricos:</b> incluyen enteros (<code>3L</code>) y números decimales (double, e.g. <code>3.14</code>)</li><li><b>Cadenas de texto (character):</b> secuencias de caracteres (e.g. <code>“Hola”</code>)</li><li><b>Lógicos (logical):</b> valores booleanos <code>TRUE</code> o <code>FALSE</code></li><li><b>Factores:</b> variables categóricas (e.g. <code>factor(c(“bajo”, “medio”, ”alto”))</code>)</li><li><b>Vectores:</b> conjuntos de datos homogéneos (e.g. <code>c(1,2,3)</code>)</li><li><b>Listas:</b> colecciones de elementos de diferentes tipos (e.g. <code>list(c(1, “medio”, TRUE))</code>)</li><li><b>Data frames:</b> estructuras tipo tabla que contienen columnas de diferentes tipos de datos</li></ul></li>
+<li><b>Objeto:</b> un contenedor con nombre donde guardas información para usarla después: un número, una lista de valores o una tabla completa.</li>
+<li><b>Atributo:</b> información extra que describe a un objeto, como sus nombres, sus dimensiones o su clase.</li>
+<li><b>Base de datos:</b> una tabla donde cada fila es una persona o caso y cada columna es una variable. En R se llama data frame.</li>
+<li><b>Generación de secuencias aleatorias:</b> crear números al azar para practicar o simular. Se fija una semilla para que otra persona obtenga exactamente los mismos números, otra muestra de reproducibilidad.</li>
+<li><b>Selección de elementos:</b> pedirle a R solo una parte de los datos: por posición, por nombre o por condición (por ejemplo, solo quienes trabajan en el turno nocturno).</li>
+<li><b>Función y argumento:</b> la función es una receta que hace una tarea; los argumentos son los ingredientes que le das (datos y opciones).</li></ul></div></section>
+
+<section id="s11"><div class="wrap"><h2>11. Consejos de programación</h2>
+<div class="g2">
+<div class="card rv"><h4>CTRL + C y CTRL + V, con criterio.</h4><p>Aprovecha código, funciones, paquetes y herramientas existentes antes de construir soluciones desde cero. Copiar está bien; pegar sin entender, no.</p></div>
+<div class="card rv"><h4>La claridad es más importante que la complejidad.</h4><p>Una solución sencilla y comprensible suele ser mejor que una innecesariamente sofisticada.</p></div>
+<div class="card rv"><h4>No existe una única forma de llegar a una solución.</h4><p>Un mismo problema puede resolverse con diferentes funciones, paquetes o procedimientos.</p></div>
+<div class="card rv"><h4>Los datos no hablan por sí solos.</h4><p>Los resultados requieren contexto, criterios de análisis e interpretación para adquirir significado.</p></div></div></div></section>
+
+<section id="s12"><div class="wrap"><h2>12. Limpieza de datos</h2>
+<p><b>CRISP-DM: preparación de los datos.</b> Es el paso que nadie presume y que decide si tu análisis es confiable.</p>
+<div class="g3" style="align-items:start">
+<div class="card rv"><h3 style="margin-top:0">Preparar el entorno</h3><ul><li><b>Librerías y paquetería:</b> un paquete se instala una sola vez (como comprar un libro de cocina); una librería se carga en cada sesión de trabajo (como abrirlo para cocinar).</li><li><b>Directorio de trabajo:</b> la carpeta donde R busca y guarda tus archivos. En Colab se trabaja con los archivos que subes a la sesión.</li><li><b>Subir la base de datos:</b> desde tu computadora o desde Google Drive.</li></ul>
+<h3>Mover datos</h3><ul><li><b>Importar:</b> traer una base a R.</li><li><b>Exportar:</b> guardar tus resultados o tu base limpia en un archivo.</li></ul></div>
+<div class="card rv" style="grid-column:span 2"><h3 style="margin-top:0">Limpiar datos</h3><ul>
+<li><b>Nombrar variables:</b> usar nombres claros, cortos y sin espacios ni acentos, para trabajar sin errores.</li>
+<li><b>Unir bases de datos:</b> combinar dos bases a partir de algo que tengan en común, como un identificador.</li>
+<li><b>Unir variables:</b> combinar varias columnas en una; por ejemplo, sumar los ítems de una escala en un puntaje total.</li>
+<li><b>Duplicados:</b> detectar y eliminar registros repetidos.</li>
+<li><b>Clase (class):</b> el tipo que R le asigna a un objeto o variable. Si un número está guardado como texto, no se puede promediar.</li>
+<li><b>Head (los primeros 10 y los últimos 10):</b> mirar el inicio y el final de la base antes de tocar nada. Regla: nunca analices lo que no has mirado.</li>
+<li><b>Vacíos e imputación:</b> los vacíos no son todos iguales. Imputar es sustituir un dato ausente con una estimación razonable. Toda decisión sobre datos faltantes se justifica y se documenta.</li>
+<li><b>Filtrar:</b> quedarte solo con los casos que cumplen una condición.</li>
+<li><b>Ordenar:</b> acomodar la base de menor a mayor o por categoría.</li>
+<li><b>Clasificar, punto de corte y percentil:</b> convertir una variable numérica en categorías (por ejemplo, niveles de riesgo) usando puntos de corte o percentiles.</li>
+<li><b>Calcular:</b> crear nuevas variables con operaciones entre columnas.</li>
+<li><b>Crear y borrar columnas o filas:</b> agregar lo que falta y quitar lo que sobra.</li>
+<li><b>Renombrar y etiquetar:</b> cambiar nombres y añadir etiquetas descriptivas a variables y categorías, para que cualquiera entienda la base.</li>
+<li><b>Variables cualitativas:</b> variables de categorías (turno, puesto, sexo). Se definen como factores, con sus niveles ordenados y bien escritos.</li></ul></div></div></div></section>
+
+<section id="s13"><div class="wrap"><h2>13. Análisis exploratorio de datos</h2>
+<div class="g2" style="align-items:center"><div>
+<p><b>CRISP-DM: comprensión de los datos.</b></p>
+<p>Conjunto de procedimientos para examinar una base de datos, identificar patrones, detectar anomalías y comprender el comportamiento de las variables. Permite reconocer valores atípicos, datos faltantes, distribuciones inusuales y posibles relaciones entre variables.</p>
+<h3>Distribución normal</h3>
+<ul><li>Es la conocida forma de campana: la mayoría de los valores se concentra alrededor del promedio y hay pocos en los extremos, de manera simétrica.</li><li>Importa porque muchas pruebas estadísticas, entre ellas la t de Student y la correlación de Pearson, esperan datos razonablemente normales.</li><li>Se revisa mirando una gráfica (un histograma, por ejemplo) y, si hace falta, con una prueba formal. Ningún dato real es perfectamente normal; lo importante es que no se aleje demasiado.</li></ul></div>
+<div class="vis rv"><i class="dot" style="right:0;top:0;background:var(--cy)"></i>
+<svg class="ch" viewBox="0 0 400 260" role="img" aria-label="Histograma con curva normal"><g fill="#d4e0ed"><rect x="40" y="200" width="30" height="20"/><rect x="70" y="170" width="30" height="50"/><rect x="100" y="130" width="30" height="90"/><rect x="130" y="85" width="30" height="135"/><rect x="160" y="55" width="30" height="165"/><rect x="190" y="45" width="30" height="175" fill="#a6bbd1"/><rect x="220" y="62" width="30" height="158"/><rect x="250" y="95" width="30" height="125"/><rect x="280" y="140" width="30" height="80"/><rect x="310" y="176" width="30" height="44"/><rect x="340" y="204" width="20" height="16"/></g><path d="M40 218C100 215 130 150 170 70S230 40 270 100 330 215 360 218" fill="none" stroke="#006bff" stroke-width="4"/><path d="M30 220H370" stroke="#0b3558" stroke-width="2"/><line x1="205" y1="30" x2="205" y2="220" stroke="#0b3558" stroke-dasharray="5 5"/></svg></div></div></div></section>
+
+<section id="s14"><div class="wrap"><h2>14. Estadística descriptiva</h2>
+<div class="g2">
+<div class="card rv"><h4>¿Qué es la estadística descriptiva?</h4><p>La parte de la estadística que resume y organiza los datos de una muestra, sin ir más allá de ellos. Responde: ¿qué tenemos y cómo se ve?</p></div>
+<div class="card rv"><h4>Tipos de variables</h4><p>Cualitativas (categorías, nominales u ordinales) y cuantitativas (números, de intervalo o razón). Determinan qué análisis puedes hacer.</p></div>
+<div class="card rv"><h4>Frecuencias y porcentajes</h4><p>Cuántas personas hay en cada categoría y qué proporción representan.</p></div>
+<div class="card rv"><h4>Medidas de tendencia central</h4><p>Media, mediana y moda. Resumen el valor "típico". La media se deja arrastrar por valores extremos; la mediana, menos.</p></div>
+<div class="card rv"><h4>Medidas de dispersión</h4><p>Rango, varianza, desviación estándar y rango intercuartílico. Dicen qué tan parecidas o diferentes son las personas entre sí. Dos grupos pueden tener el mismo promedio y realidades opuestas.</p></div>
+<div class="card rv"><h4>Tablas</h4><p>Cómo presentar este resumen de forma limpia y profesional, con la paquetería gtsummary.</p></div></div></div></section>
+
+<section id="s15"><div class="wrap"><h2>15. Introducción a la estadística inferencial</h2>
+<div class="g2" style="align-items:center"><div>
+<p><b>CRISP-DM: modelado y evaluación.</b> Pasamos de describir a la muestra a preguntar: ¿lo que veo también ocurre más allá de esta muestra, o pudo ser casualidad?</p>
+<ul><li><b>Diferencia de grupos (gtsummary):</b> compara los promedios de dos grupos, por ejemplo turno matutino frente a nocturno, mediante la t de Student. Se interpreta junto con el valor p (qué tan compatible es lo observado con "no hay diferencia") y el tamaño del efecto (si la diferencia realmente importa). gtsummary permite presentar la comparación en una tabla lista para reporte.</li>
+<li><b>Correlación de Pearson:</b> mide qué tan juntas se mueven dos variables numéricas, de -1 a +1. Se lee su dirección y su fuerza. Advertencia que no se negocia: correlación no es causalidad.</li></ul></div>
+<div class="vis rv"><i class="dot" style="left:0;bottom:0;background:var(--mag)"></i>
+<svg class="ch" viewBox="0 0 400 260" role="img" aria-label="Diagrama de dispersión con línea de tendencia"><path d="M40 20V220H370" fill="none" stroke="#0b3558" stroke-width="2"/><line x1="55" y1="200" x2="360" y2="40" stroke="#006bff" stroke-width="3"/><g fill="#0b3558" opacity=".75"><circle cx="70" cy="190" r="6"/><circle cx="95" cy="175" r="6"/><circle cx="110" cy="195" r="6"/><circle cx="140" cy="160" r="6"/><circle cx="165" cy="150" r="6"/><circle cx="185" cy="165" r="6"/><circle cx="210" cy="125" r="6"/><circle cx="240" cy="130" r="6"/><circle cx="260" cy="95" r="6"/><circle cx="290" cy="100" r="6"/><circle cx="315" cy="65" r="6"/><circle cx="345" cy="70" r="6"/></g></svg></div></div></div></section>
+
+<section id="s16"><div class="wrap"><h2>16. Gráficas profesionales</h2>
+<p><b>CRISP-DM: despliegue.</b></p>
+<p>Has limpiado, descrito y comparado. Llega la reunión con la dirección. Proyectas una tabla con cuarenta filas y tres decimales por celda. A los diez segundos, la atención se fue. La decisión se pospone o se toma por corazonada. Un hallazgo que no se comunica es, en la práctica, un hallazgo que no existió.</p>
+<div class="g2" style="margin:32px 0">
+<div class="rv"><svg class="ch" viewBox="0 0 400 270" role="img" aria-label="Gráfica poco clara"><rect width="400" height="270" fill="#fff6c2"/><g stroke="#000" stroke-width="2"><path d="M40 20V230H380M40 60H380M40 100H380M40 140H380M40 180H380"/></g><g stroke="#000" stroke-width="3"><rect x="55" y="90" width="50" height="140" fill="#ff0000"/><rect x="120" y="50" width="50" height="180" fill="#00ff00"/><rect x="185" y="130" width="50" height="100" fill="#ff00ff"/><rect x="250" y="70" width="50" height="160" fill="#00ffff"/><rect x="315" y="110" width="50" height="120" fill="#ff8800"/></g><text x="60" y="255" font-family="Comic Sans MS,cursive" font-size="16" fill="#f00" transform="rotate(-12 60 255)">serie1 serie2 serie3 serie4</text><text x="200" y="14" font-family="Comic Sans MS,cursive" font-size="14" text-anchor="middle">grafica1</text></svg><p class="fn" style="text-align:center">Gráfica poco clara</p></div>
+<div class="rv"><svg class="ch" viewBox="0 0 400 270" role="img" aria-label="Gráfica profesional"><text x="24" y="38" font-family="Manrope,sans-serif" font-weight="700" font-size="19" fill="#0b3558">El turno nocturno concentra la mayor carga</text><text x="24" y="60" font-family="Manrope,sans-serif" font-size="13" fill="#476788">Puntaje promedio de carga de trabajo por turno</text><g font-family="Manrope,sans-serif" font-size="14" fill="#0b3558"><text x="24" y="112">Nocturno</text><rect x="110" y="94" width="230" height="26" rx="6" fill="#006bff"/><text x="348" y="113" font-weight="700">4.2</text><text x="24" y="156">Vespertino</text><rect x="110" y="138" width="170" height="26" rx="6" fill="#a6bbd1"/><text x="288" y="157">3.1</text><text x="24" y="200">Matutino</text><rect x="110" y="182" width="140" height="26" rx="6" fill="#a6bbd1"/><text x="258" y="201">2.6</text></g></svg><p class="fn" style="text-align:center">Gráfica profesional</p></div></div>
+<ul><li><b>Gráficas del pasado frente a gráficas de la era digital:</b> antes se hacían a mano o con plantillas fijas, y cada cambio de datos obligaba a rehacerlas. Hoy se generan con código, se actualizan solas con datos nuevos, son reproducibles y pueden ser interactivas. Un ejemplo histórico: Florence Nightingale usó una gráfica propia para persuadir a quienes decidían en la guerra de Crimea.</li>
+<li><b>Fuentes de Google:</b> Google Fonts ofrece tipografías gratuitas. Una buena fuente se lee fácil, también a distancia, y le da identidad visual a tu reporte.</li>
+<li><b>Colores:</b> una paleta con propósito resalta lo importante y deja el resto en tonos neutros. Cuida la accesibilidad para personas con daltonismo. Generador de códigos de color: <a class="b" href="https://htmlcolorcodes.com/es/" target="_blank" rel="noopener" style="font-size:16px;padding:4px 14px">htmlcolorcodes.com</a></li>
+<li><b>Tipos de gráficas:</b> se elige según la pregunta: distribución (histogramas), comparación de grupos (cajas, violín o barras), relación entre dos variables (dispersión) y conteos por categoría (barras ordenadas).</li></ul></div></section>
+
+<section id="s17"><div class="wrap"><h2>17. Integrar lo aprendido</h2>
+<p>Cierre participativo del taller.</p>
+<div class="g3"><div class="card rv"><h4>¿Qué han aprendido?</h4></div><div class="card rv"><h4>¿Qué les gustó, qué no les gustó y qué se puede mejorar del taller?</h4></div><div class="card rv"><h4>¿Cómo lo aplicarían en su trabajo, estudio o investigación?</h4></div></div></div></section>
+
+<section id="s18"><div class="wrap"><h2>18. El último consejo</h2>
+<p class="big rv">La única manera de aprender R es usando y trabajando con R</p>
+<p>Google colab tiene base de datos</p>
+<div><a class="b" href="https://www.kaggle.com" target="_blank" rel="noopener">Kaggle</a><a class="b" href="https://www.inegi.org.mx/programas/enoe/15ymas" target="_blank" rel="noopener">INEGI</a><a class="b" href="https://github.com/" target="_blank" rel="noopener">GitHub</a><a class="b" href="https://osf.io/" target="_blank" rel="noopener">OSF</a></div>
+<p style="margin-top:16px">En la carpeta de drive hay bibliografía de utilidad</p></div></section>
+
+<section id="s19"><div class="wrap"><h2>19. Evaluación de satisfacción</h2>
+<div class="row"><img class="qr" src="https://cdn.jsdelivr.net/gh/TheGuppy-blip/Distribucion@e5011027a8fc5b43f289404cc21407ba3e2b92c2/imagenes/forms.png" alt="QR de evaluación"><a class="b" href="https://forms.gle/84RFxGZuaiRiVs569" target="_blank" rel="noopener">Abrir evaluación</a></div>
+<p class="big rv" style="margin-top:40px">Los datos no toman decisiones. Las personas que saben preguntar, limpiar e interpretar, sí.</p></div></section>
+
+<section id="s20"><div class="wrap"><h2>20. Contacto</h2>
+<a class="b" href="mailto:alancortes822@gmail.com">alancortes822@gmail.com</a><a class="b" href="mailto:alan.ramirezco@comunidad.unam.mx">alan.ramirezco@comunidad.unam.mx</a></div></section>
+
+<footer><div class="wrap"><p class="mut" style="margin:0;font-size:14px">© 2026 TheGuppy<br>Material elaborado con fines académicos. Se permite su reproducción parcial o total para fines no comerciales, siempre y cuando se cite la fuente.</p></div></footer>
+
+<script>
+(function(){
+var rm=matchMedia('(prefers-reduced-motion:reduce)').matches,vh=innerHeight;
+var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('on');io.unobserve(x.target)}})},{threshold:.12});
+document.querySelectorAll('.rv').forEach(function(el,i){el.style.transitionDelay=(i%3)*90+'ms';io.observe(el)});
+var hs=[].slice.call(document.querySelectorAll('h2')),sh=[].slice.call(document.querySelectorAll('#bg i')),pg=document.getElementById('pg'),t=false;
+function upd(){t=false;vh=innerHeight;var y=scrollY,kmax=innerWidth<700?1.3:1.7;
+if(!rm){hs.forEach(function(h){var r=h.getBoundingClientRect().top,p=Math.min(1,Math.max(0,(vh*.88-r)/(vh*.5)));h.style.transform='scale('+(1+(kmax-1)*(1-p)).toFixed(3)+')'});
+sh.forEach(function(s){s.style.transform='translateY('+(-y*s.dataset.s).toFixed(1)+'px)'})}
+pg.style.width=(y/(document.documentElement.scrollHeight-vh)*100)+'%'}
+addEventListener('scroll',function(){if(!t){t=true;requestAnimationFrame(upd)}},{passive:true});addEventListener('resize',upd);upd();
+var sc=document.getElementById('sc'),tl=document.getElementById('tl');
+if(sc&&!rm){document.querySelector('.hero').addEventListener('pointermove',function(e){var b=sc.getBoundingClientRect(),x=(e.clientX-b.left-b.width/2)/b.width,y=(e.clientY-b.top-b.height/2)/b.height;tl.style.transform='rotateY('+x*30+'deg) rotateX('+-y*30+'deg)'})}
+if(!rm&&matchMedia('(hover:hover)').matches){document.querySelectorAll('.card').forEach(function(c){c.addEventListener('pointermove',function(e){var b=c.getBoundingClientRect(),x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;c.style.transform='perspective(900px) rotateY('+x*5+'deg) rotateX('+-y*5+'deg)'});c.addEventListener('pointerleave',function(){c.style.transform=''})})}
+})();
+</script>
+</body>
+</html>
